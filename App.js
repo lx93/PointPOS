@@ -1,8 +1,8 @@
 'use strict'
 
 import React, {Component} from 'react';
-import HomePage from './HomePage';
-import LoginPage from './LoginPage';
+import HomePage from './app/HomePage';
+import LoginPage from './app/LoginPage';
 import {StackNavigator,navigation} from 'react-navigation';
 
 
