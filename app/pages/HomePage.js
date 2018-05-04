@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import {Container,Header,Title,Button,Icon,Tabs,Tab,Right,Left,Body} from "native-base";
-import IssueTab from "./issueTab";
-import RedeemTab from "./redeemTab";
-import SettingsTab from "./settingsTab";
+import {Container,Header,Title,Button,Icon,Tabs,Tab,Right,Left,Body, Text} from "native-base";
+import IssueTab from "../tabs/issueTab";
+import RedeemTab from "../tabs/redeemTab";
+import SettingsTab from "../tabs/settingsTab";
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -13,15 +13,15 @@ export default class HomePage extends Component {
     return (
       <Container>
         <Header hasTabs>
-          <Left>
-            <Button transparent onPress={() => this.props.navigation.goBack()}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
+          <Left />
           <Body>
             <Title>Point POS</Title>
           </Body>
-          <Right />
+          <Right>
+            <Button transparent onPress={() => this.props.navigation.navigate('LoginPage')}>
+              <Text>Logout</Text>
+            </Button>
+          </Right>
         </Header>
 
         <Tabs>

@@ -10,7 +10,7 @@ export default class redeemTab extends Component {
           <Card style={{flex: 0}}>
             <CardItem>
               <Left>
-                <Thumbnail source={require('./resources/1risetokenQR.png')} />
+                <Thumbnail source={require('../resources/1risetokenQR.png')} />
                 <Body>
                   <Text>NativeBase</Text>
                   <Text note>April 15, 2016</Text>
@@ -19,7 +19,7 @@ export default class redeemTab extends Component {
             </CardItem>
             <CardItem>
               <Body>
-                <Image source={require('./resources/1risetokenQR.png')} style={{height: 200, width: 200, flex: 1}}/>
+                <Image source={require('../resources/1risetokenQR.png')} style={{height: 200, width: 200, flex: 1}}/>
                 <Text>Your text here</Text>
               </Body>
             </CardItem>
