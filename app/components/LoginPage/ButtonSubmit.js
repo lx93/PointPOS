@@ -3,6 +3,7 @@ import Dimensions from 'Dimensions';
 import {StyleSheet,TouchableOpacity,Text,Animated,Easing,Image,Alert,View,Container,Header,Title,Button,Icon,Tabs,Tab,Right,Left,Body} from 'react-native';
 import spinner from '../../resources/loading.gif';
 import App from '../../../App';
+import LoginPage from '../../pages/LoginPage';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -20,10 +21,6 @@ export default class ButtonSubmit extends Component {
     this.growAnimated = new Animated.Value(0);
   }
 
-
-  componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps', newProps);
-  }
 
   _onPress = (props) => {
     if (this.state.isLoading) return;
@@ -43,9 +40,8 @@ export default class ButtonSubmit extends Component {
 
 
     setTimeout(() => {
-
-      console.log("fuck you"+this.props.loginState.username)
-      // new App().getToken(this.props.loginState.username, this.props.loginState.password);
+      console.log('now calling token')
+      new LoginPage().getToken();
       this.props.navigation.navigate('HomePage');
       this.setState({isLoading: false});
       this.buttonAnimated.setValue(0);
@@ -81,7 +77,7 @@ export default class ButtonSubmit extends Component {
             {this.state.isLoading ? (
               <Image source={spinner} style={styles.image} />
             ) : (
-              <Text style={styles.text}>{this.props.loginState.username}</Text>
+              <Text style={styles.text}>Login</Text>
             )}
           </TouchableOpacity>
           <Animated.View

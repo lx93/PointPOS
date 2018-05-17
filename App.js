@@ -16,49 +16,49 @@ const RootStack = StackNavigator(
 
 
 //this one is for Rice Paddy
-var email = 'xli@pointup.io';
-var password = 'admin';
-
+var email = 'xli@pointup.io'
+var password = 'admin'
 
 
 export default class App extends Component{
 	constructor(props) {
 		super(props);
-		this.updateState();
 	}
-
-
-
 
 	updateState = async() => {
 		try {
-			let token = await this.getToken();
-			this.setState({token : token});
+			let token = await this.getToken(email,password);
+			this.setState({token: token});
+			console.log('our good state'+this.state.token)
 
 			let merchantInfo = await this.getMerchantInfo(token);
 			this.setState(merchantInfo);
+			console.log("our fucking state"+this.state)
 		}
 
 		catch (error) {console.log(error);}
-
-		// console.log(this.state.token);
-		// console.log(this.state.name);
-		// console.log(this.state.email);
-
 	}
 
+
+
+  getCreds = (u, p) => {
+  	//email = u;
+  	//password = p;
+  	this.updateState();
+
+	}
 
 
 // update the state of merchant using authToken
 	getMerchantInfo = async(authToken) => {
-		alert(authToken)
 	    var options = {
 	      "method": "GET",
 	      "headers": {
 	        "authorization": "Bearer " + authToken,
 	        "content-type": "application/json"
-	    }
-	};
+	    	}
+		}
+
 		try {
 			let response = await fetch('http://point-server-env.exyx39rieh.us-east-1.elasticbeanstalk.com/merchants/',options);
 			let responseJson = await response.json();
@@ -83,7 +83,6 @@ export default class App extends Component{
 			let response = await fetch('http://point-server-env.exyx39rieh.us-east-1.elasticbeanstalk.com/merchants/login',options);
 			let responseJson = await response.json();
 			return responseJson.token;
-			//return responseJson.token;
 		} catch (error) {console.error(error);}
 	}
 

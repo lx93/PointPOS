@@ -28,7 +28,7 @@ export default class HomePage extends Component {
         <Header hasTabs>
           <Left />
           <Body>
-            <Title>{this.props.screenProps.name}</Title>
+            <Title>hi</Title>
           </Body>
           <Right>
             <Button transparent onPress={() => this.props.navigation.navigate('LoginPage')}>

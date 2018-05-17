@@ -6,20 +6,27 @@ import Wallpaper from '../components/LoginPage/Wallpaper';
 import ButtonSubmit from '../components/LoginPage/ButtonSubmit';
 import SignupSection from '../components/LoginPage/SignupSection';
 import {Button, Text} from 'native-base';
+import App from '../../App';
 
 
-var username = 'sweetie';
+
+var username;
 var password;
 export default class LoginPage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {username: username, password: password};
   }
 
+  updateUsername (text) {username = text;console.log("username： "+ username); }
+  updatePassword (text) {password = text;console.log("password: "+ password); }
 
-  updateUsername (text) {username = text;console.log("username： "+ this.state.username)}
-  updatePassword (text) {password = text;console.log("password: "+ this.state.password)}
+
+  getToken () {
+    console.log ('username is'+username+'password is'+password)
+    new App().getCreds(username, password);
+  }
+
 
   render() {
     return (
@@ -27,7 +34,7 @@ export default class LoginPage extends Component {
         <Logo />
         <Form />
         <SignupSection />
-        <ButtonSubmit navigation={this.props.navigation} loginState={this.state} />
+        <ButtonSubmit navigation={this.props.navigation} />
       </Wallpaper>
     );
   }
