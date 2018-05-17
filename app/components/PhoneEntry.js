@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet,View,Text,ScrollView,TextInput} from 'react-native';
-import NumPad from './NumPad';
 import {sendSMS} from '../utils/Messaging';
 
 export default class extends React.Component{

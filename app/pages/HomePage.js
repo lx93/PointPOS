@@ -7,15 +7,28 @@ import SettingsTab from "../tabs/settingsTab";
 export default class HomePage extends Component {
   constructor(props) {
     super(props);
+    this.state = {isReady: false};
+  }
+
+
+// fix for android. load Robot_medium fonts to avoid font loading error
+  async componentDidMount() {
+    await Expo.Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+    });
+    this.setState({ isReady: true });
   }
 
   render() {
+    if (!this.state.isReady) {return <Expo.AppLoading />;}
+
     return (
       <Container>
         <Header hasTabs>
           <Left />
           <Body>
-            <Title>Point POS</Title>
+            <Title>{this.props.screenProps.name}</Title>
           </Body>
           <Right>
             <Button transparent onPress={() => this.props.navigation.navigate('LoginPage')}>

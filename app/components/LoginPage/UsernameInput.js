@@ -2,13 +2,17 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Dimensions from 'Dimensions';
 import {StyleSheet, View, TextInput, Image} from 'react-native';
+import LoginPage from '../../pages/LoginPage';
 
-export default class UserInput extends Component {
+export default class UsernameInput extends Component {
+
+
   render() {
     return (
       <View style={styles.inputWrapper}>
         <Image source={this.props.source} style={styles.inlineImg} />
         <TextInput
+          onChangeText={(text) => new LoginPage().updateUsername(text)}
           style={styles.input}
           placeholder={this.props.placeholder}
           secureTextEntry={this.props.secureTextEntry}
@@ -23,7 +27,7 @@ export default class UserInput extends Component {
   }
 }
 
-UserInput.propTypes = {
+UsernameInput.propTypes = {
   source: PropTypes.number.isRequired,
   placeholder: PropTypes.string.isRequired,
   secureTextEntry: PropTypes.bool,

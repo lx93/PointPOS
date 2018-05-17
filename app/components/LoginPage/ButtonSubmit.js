@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Dimensions from 'Dimensions';
 import {StyleSheet,TouchableOpacity,Text,Animated,Easing,Image,Alert,View,Container,Header,Title,Button,Icon,Tabs,Tab,Right,Left,Body} from 'react-native';
 import spinner from '../../resources/loading.gif';
+import App from '../../../App';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -19,11 +20,16 @@ export default class ButtonSubmit extends Component {
     this.growAnimated = new Animated.Value(0);
   }
 
+
+  componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps', newProps);
+  }
+
   _onPress = (props) => {
     if (this.state.isLoading) return;
-
     this.setState({isLoading: true});
-    Animated.timing(this.buttonAnimated, {
+
+   Animated.timing(this.buttonAnimated, {
       toValue: 1,
       duration: 200,
       easing: Easing.linear,
@@ -37,6 +43,9 @@ export default class ButtonSubmit extends Component {
 
 
     setTimeout(() => {
+
+      console.log("fuck you"+this.props.loginState.username)
+      // new App().getToken(this.props.loginState.username, this.props.loginState.password);
       this.props.navigation.navigate('HomePage');
       this.setState({isLoading: false});
       this.buttonAnimated.setValue(0);
@@ -62,7 +71,6 @@ export default class ButtonSubmit extends Component {
       inputRange: [0, 1],
       outputRange: [1, MARGIN],
     });
-
     return (
       <View style={styles.container}>
         <Animated.View style={{width: changeWidth}}>
@@ -73,7 +81,7 @@ export default class ButtonSubmit extends Component {
             {this.state.isLoading ? (
               <Image source={spinner} style={styles.image} />
             ) : (
-              <Text style={styles.text}>LOGIN</Text>
+              <Text style={styles.text}>{this.props.loginState.username}</Text>
             )}
           </TouchableOpacity>
           <Animated.View
