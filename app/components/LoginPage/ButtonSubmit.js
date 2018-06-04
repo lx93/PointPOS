@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import Dimensions from 'Dimensions';
 import {StyleSheet,TouchableOpacity,Text,Animated,Easing,Image,Alert,View,Container,Header,Title,Button,Icon,Tabs,Tab,Right,Left,Body} from 'react-native';
 import spinner from '../../resources/loading.gif';
-import App from '../../../App';
-import LoginPage from '../../pages/LoginPage';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -26,6 +24,9 @@ export default class ButtonSubmit extends Component {
     if (this.state.isLoading) return;
     this.setState({isLoading: true});
 
+    this.props.getToken();
+
+
    Animated.timing(this.buttonAnimated, {
       toValue: 1,
       duration: 200,
@@ -38,16 +39,19 @@ export default class ButtonSubmit extends Component {
     }, 2000);
 
 
-
     setTimeout(() => {
-      console.log('now calling token')
-      new LoginPage().getToken();
-      this.props.navigation.navigate('HomePage');
       this.setState({isLoading: false});
       this.buttonAnimated.setValue(0);
       this.growAnimated.setValue(0);
     }, 2300);
+
+
+    setTimeout(() => {
+    }, 2000);
+
   }
+
+
 
   _onGrow() {
     Animated.timing(this.growAnimated, {

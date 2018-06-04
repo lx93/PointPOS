@@ -20,15 +20,17 @@ export default class HomePage extends Component {
     this.setState({ isReady: true });
   }
 
+
   render() {
     if (!this.state.isReady) {return <Expo.AppLoading />;}
+    // console.log ('HomePage gets this token state: ' + JSON.stringify(this.props.screenProps.state))
 
     return (
       <Container>
         <Header hasTabs>
           <Left />
           <Body>
-            <Title>hi</Title>
+            <Title>{this.props.screenProps.state.merchantInfo.name}</Title>
           </Body>
           <Right>
             <Button transparent onPress={() => this.props.navigation.navigate('LoginPage')}>
@@ -54,4 +56,3 @@ export default class HomePage extends Component {
 }
 
 
-console.disableYelloBox = true;
