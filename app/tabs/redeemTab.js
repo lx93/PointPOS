@@ -17,13 +17,16 @@ export default class redeemTab extends Component {
 
 
   setBalanceIdState(balanceID) {
-    this.setState({balanceID:balanceID})
-    console.log(this.state.balanceID)
+    var parsedData = JSON.parse(balanceID)
+    balanceID = parsedData.balanceId;
+    getBalance(balanceID)
+
+    // this.setState({balanceID:balanceID})
+    // alert(getBalance(balanceID))
   }
 
 
   render() {
-
 
     // ========================== renders the QRScanner ========================== 
 

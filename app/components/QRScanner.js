@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Dimensions,Text,StatusBar,StyleSheet,TouchableOpacity,} from 'react-native';
+import {Dimensions,Text,StatusBar,StyleSheet,TouchableOpacity,LayoutAnimation} from 'react-native';
 import { Container, Header, View, Button, Icon, Fab } from 'native-base';
 import { BarCodeScanner, Permissions } from 'expo';
 
@@ -25,11 +25,12 @@ export default class QRScanPage extends Component {
     if (result.data !== this.state.lastScannedUrl) {
       LayoutAnimation.spring();
       this.setState({ lastScannedUrl: result.data });
-      this._handleSuccess();
+      this._handleSuccess(result);
     }
   };
 
-  _handleSuccess = () => {
+  _handleSuccess = (result) => {
+    this.props.result(result.data);
     if (!this.state.lastScannedUrl) {return;}
     this.props.result(this.state.lastScannedUrl);
     // console.log(this.state.lastScannedUrl);
@@ -58,12 +59,6 @@ export default class QRScanPage extends Component {
           </View>
 
 
-          <View style={{ flex: 1 }}>
-            <Button block success onPress={()=> this._handleTest()}>
-              <Text>test scan</Text>
-            </Button>
-          </View>
-
       </Container>
 
     );
@@ -78,4 +73,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   }
 });
+          // this is to enabling the test scan button for debugging
+
+          // <View style={{ flex: 1 }}>
+          //   <Button block success onPress={()=> this._handleTest()}>
+          //     <Text>test scan</Text>
+          //   </Button>
+          // </View>
 
