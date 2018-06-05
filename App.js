@@ -9,9 +9,8 @@ import {StackNavigator,navigation} from 'react-navigation';
 
 const RootStack = StackNavigator(
 	{
-	  HomePage:{screen:HomePage},
-	  	  LoginPage:{screen:LoginPage},
-
+		HomePage:{screen:HomePage},
+		LoginPage:{screen:LoginPage},
 	},
 	{headerMode:'none'},
 );

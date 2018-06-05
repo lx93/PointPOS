@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import {Container,Header,Title,Button,Icon,Tabs,Tab,Right,Left,Body, Text} from "native-base";
-import IssueTab from "../tabs/issueTab";
-import RedeemTab from "../tabs/redeemTab";
-import SettingsTab from "../tabs/settingsTab";
+import IssueTab from "../tabs/IssueTab";
+import RedeemTab from "../tabs/RedeemTab";
+import SettingsTab from "../tabs/SettingsTab";
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ export default class HomePage extends Component {
             <IssueTab merchantName={this.props.screenProps.state.merchantInfo.name}/>
           </Tab>
           <Tab heading="Redeem">
-            <RedeemTab />
+            <RedeemTab navigation={this.props.navigation}/>
           </Tab>
           <Tab heading="Settings">
             <SettingsTab />

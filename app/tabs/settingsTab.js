@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, List, ListItem, Text, Icon, Left, Body, Right, Switch } from 'native-base';
-export default class settingsTab extends Component {
+export default class SettingsTab extends Component {
   render() {
     return (
       <Container>

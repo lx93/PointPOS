@@ -6,7 +6,7 @@ import PhoneEntry from '../components/PhoneEntry';
 import {sendSMS,smsGenerator} from '../utils/Messaging';
 
 
-export default class issueTab extends Component {
+export default class IssueTab extends Component {
 
 
   constructor(props) {
@@ -54,10 +54,10 @@ export default class issueTab extends Component {
 
     // renders the phone number entry page
     if (this.state.showPhone) {
-      // --------------------------this renders an alert-input----------------------
+      // ------------------------- this renders an alert-input for number entry ---------------------
       // return (<PhoneEntry onCancel={()=>{this.setState({showPhone: false})}} giftValue={this.state.amount}/> )
 
-      // -------------------------Alternative, this renders in the same page---------------------
+      // ------------------------ Alternative, this renders in the same page --------------------
       return (
       <Container>
         <Header><Title>Enter Customer Phone Number Below</Title></Header>
