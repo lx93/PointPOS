@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import {Container,Header,Title,Button,Icon,Tabs,Tab,Right,Left,Body, Text} from "native-base";
-import IssueTab from "../tabs/issueTab";
-import RedeemTab from "../tabs/redeemTab";
-import SettingsTab from "../tabs/settingsTab";
+import IssueTab from "../tabs/IssueTab";
+import RedeemTab from "../tabs/RedeemTab";
+import SettingsTab from "../tabs/SettingsTab";
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -20,15 +20,17 @@ export default class HomePage extends Component {
     this.setState({ isReady: true });
   }
 
+
   render() {
     if (!this.state.isReady) {return <Expo.AppLoading />;}
+    // console.log ('HomePage gets this token state: ' + JSON.stringify(this.props.screenProps.state))
 
     return (
       <Container>
         <Header hasTabs>
           <Left />
           <Body>
-            <Title>hi</Title>
+            <Title>{this.props.screenProps.state.merchantInfo.name}</Title>
           </Body>
           <Right>
             <Button transparent onPress={() => this.props.navigation.navigate('LoginPage')}>
@@ -39,10 +41,10 @@ export default class HomePage extends Component {
 
         <Tabs>
           <Tab heading="Issue">
-            <IssueTab />
+            <IssueTab merchantName={this.props.screenProps.state.merchantInfo.name}/>
           </Tab>
           <Tab heading="Redeem">
-            <RedeemTab />
+            <RedeemTab navigation={this.props.navigation}/>
           </Tab>
           <Tab heading="Settings">
             <SettingsTab />
@@ -54,4 +56,3 @@ export default class HomePage extends Component {
 }
 
 
-console.disableYelloBox = true;

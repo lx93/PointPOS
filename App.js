@@ -3,50 +3,42 @@
 import React, {Component} from 'react';
 import HomePage from './app/pages/HomePage';
 import LoginPage from './app/pages/LoginPage';
+import ButtomSubmit from './app/components/LoginPage/ButtonSubmit';
 import {StackNavigator,navigation} from 'react-navigation';
 
 
 const RootStack = StackNavigator(
 	{
-	  LoginPage:{screen:LoginPage},
-	  HomePage:{screen:HomePage},
+		HomePage:{screen:HomePage},
+		LoginPage:{screen:LoginPage},
 	},
 	{headerMode:'none'},
 );
 
 
-//this one is for Rice Paddy
-var email = 'xli@pointup.io'
-var password = 'admin'
-
-
 export default class App extends Component{
 	constructor(props) {
 		super(props);
+		this.state = {token:'not available', merchantInfo:{name:'not available'}}
 	}
 
-	updateState = async() => {
+	updateState = async(u,p) => {
 		try {
-			let token = await this.getToken(email,password);
-			this.setState({token: token});
-			console.log('our good state'+this.state.token)
-
+			let token = await this.getToken(u,p);
 			let merchantInfo = await this.getMerchantInfo(token);
-			this.setState(merchantInfo);
-			console.log("our fucking state"+this.state)
-		}
+			
+			await this.setState({token:token,merchantInfo});
 
+
+			if (merchantInfo.message == 'Auth failed') {alert('Incorrect Login. Please try again.');}
+			else {alert('Login successful'); }
+
+			// console.log('our token state is: '+ JSON.stringify(this.state.token))
+			// console.log("our merchantInfo name is: "+this.state.merchantInfo.name)
+		}
 		catch (error) {console.log(error);}
 	}
 
-
-
-  getCreds = (u, p) => {
-  	//email = u;
-  	//password = p;
-  	this.updateState();
-
-	}
 
 
 // update the state of merchant using authToken
@@ -60,27 +52,28 @@ export default class App extends Component{
 		}
 
 		try {
-			let response = await fetch('http://point-server-env.exyx39rieh.us-east-1.elasticbeanstalk.com/merchants/',options);
+			let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/',options);
 			let responseJson = await response.json();
 			return responseJson;
 		} catch (error) {console.error(error);}
 	}
 
 // send over the username and password to server to retrieve an authToken
-	getToken = async() => {
+	getToken = async(u,p) => {
+		console.log('username is: '+u+' password is: '+p)
 	    var options = {
 	    	"method": "POST",
 	    	"headers": {
 	    		"content-type": "application/json"
 	    	},
 	    	"body": JSON.stringify({
-	    		"email": email,
-	    		"password": password,
+	    		"email": u,
+	    		"password": p,
 	    	}),
 	    };
 
 		try {
-			let response = await fetch('http://point-server-env.exyx39rieh.us-east-1.elasticbeanstalk.com/merchants/login',options);
+			let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/login',options);
 			let responseJson = await response.json();
 			return responseJson.token;
 		} catch (error) {console.error(error);}
@@ -88,7 +81,9 @@ export default class App extends Component{
 
 
 	render() {
-		return (<RootStack screenProps= {this.state} />)
+		this.allProps = {state: this.state, updateState: (u,p) => this.updateState(u,p)};
+		console.log(this.state)
+		return (<RootStack screenProps= {this.allProps} />)
 	}
 }
 
