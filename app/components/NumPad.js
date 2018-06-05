@@ -13,26 +13,26 @@ export default class NumPad extends Component{
 		return (
 			<Container>        
 		        <View style={{flex: 1, flexDirection: 'row'}}>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('1')}><Text style={{fontSize:20}}>1</Text></Button>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('2')}><Text style={{fontSize:20}}>2</Text></Button>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('3')}><Text style={{fontSize:20}}>3</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('1')}><Text style={{fontSize:20}}>1</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('2')}><Text style={{fontSize:20}}>2</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('3')}><Text style={{fontSize:20}}>3</Text></Button>
 		        </View>
 
 		        <View style={{flex: 1, flexDirection: 'row'}}>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('4')}><Text style={{fontSize:20}}>4</Text></Button>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('5')}><Text style={{fontSize:20}}>5</Text></Button>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('6')}><Text style={{fontSize:20}}>6</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('4')}><Text style={{fontSize:20}}>4</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('5')}><Text style={{fontSize:20}}>5</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('6')}><Text style={{fontSize:20}}>6</Text></Button>
 		        </View>
 
 		        <View style={{flex: 1, flexDirection: 'row'}}>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('7')}><Text style={{fontSize:20}}>7</Text></Button>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('8')}><Text style={{fontSize:20}}>8</Text></Button>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('9')}><Text style={{fontSize:20}}>9</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('7')}><Text style={{fontSize:20}}>7</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('8')}><Text style={{fontSize:20}}>8</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('9')}><Text style={{fontSize:20}}>9</Text></Button>
 		        </View>
 
 		        <View style={{flex: 1, flexDirection: 'row'}}>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('.')}><Text style={{fontSize:20}}>.</Text></Button>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.updateAmount('0')}><Text style={{fontSize:20}}>0</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('.')}><Text style={{fontSize:20}}>.</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.update('0')}><Text style={{fontSize:20}}>0</Text></Button>
 		          <Button transparent style={styles.numpad} onPress={() => this.props.clear()}><Text style={{fontSize:20}}>DEL</Text></Button>
 		        </View>
 		    </Container>

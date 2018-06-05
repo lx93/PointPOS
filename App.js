@@ -3,13 +3,15 @@
 import React, {Component} from 'react';
 import HomePage from './app/pages/HomePage';
 import LoginPage from './app/pages/LoginPage';
+import ButtomSubmit from './app/components/LoginPage/ButtonSubmit';
 import {StackNavigator,navigation} from 'react-navigation';
 
 
 const RootStack = StackNavigator(
 	{
-	  LoginPage:{screen:LoginPage},
 	  HomePage:{screen:HomePage},
+	  	  LoginPage:{screen:LoginPage},
+
 	},
 	{headerMode:'none'},
 );
@@ -18,7 +20,7 @@ const RootStack = StackNavigator(
 export default class App extends Component{
 	constructor(props) {
 		super(props);
-		this.state = {token:'not available yet'}
+		this.state = {token:'not available', merchantInfo:{name:'not available'}}
 	}
 
 	updateState = async(u,p) => {
@@ -30,7 +32,7 @@ export default class App extends Component{
 
 
 			if (merchantInfo.message == 'Auth failed') {alert('Incorrect Login. Please try again.');}
-			else {alert('Login successful');RootStack.navigate('HomePage');}
+			else {alert('Login successful'); }
 
 			// console.log('our token state is: '+ JSON.stringify(this.state.token))
 			// console.log("our merchantInfo name is: "+this.state.merchantInfo.name)
@@ -51,7 +53,7 @@ export default class App extends Component{
 		}
 
 		try {
-			let response = await fetch('http://point-server-env.exyx39rieh.us-east-1.elasticbeanstalk.com/merchants/',options);
+			let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/',options);
 			let responseJson = await response.json();
 			return responseJson;
 		} catch (error) {console.error(error);}
@@ -72,7 +74,7 @@ export default class App extends Component{
 	    };
 
 		try {
-			let response = await fetch('http://point-server-env.exyx39rieh.us-east-1.elasticbeanstalk.com/merchants/login',options);
+			let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/login',options);
 			let responseJson = await response.json();
 			return responseJson.token;
 		} catch (error) {console.error(error);}

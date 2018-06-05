@@ -41,7 +41,7 @@ export default class HomePage extends Component {
 
         <Tabs>
           <Tab heading="Issue">
-            <IssueTab />
+            <IssueTab merchantName={this.props.screenProps.state.merchantInfo.name}/>
           </Tab>
           <Tab heading="Redeem">
             <RedeemTab />

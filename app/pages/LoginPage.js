@@ -21,7 +21,6 @@ export default class LoginPage extends Component {
   updateUsername (text) {username = text;console.log(text)}
   updatePassword (text) {password = text;console.log(text)}
 
-
   getToken () {
     this.props.screenProps.updateState(username,password);
   }
@@ -32,7 +31,7 @@ export default class LoginPage extends Component {
         <Logo />
         <Form />
         <SignupSection />
-        <ButtonSubmit navigation={this.props.navigation} getToken={this.getToken}/>
+        <ButtonSubmit navigation={this.props.navigation} getToken={this.getToken} screenProps={this.props.screenProps}/>
       </Wallpaper>
     );
   }

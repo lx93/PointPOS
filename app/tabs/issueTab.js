@@ -51,6 +51,8 @@ export default class issueTab extends Component {
   }
 
   render() {
+
+    // renders the phone number entry page
     if (this.state.showPhone) {
       // --------------------------this renders an alert-input----------------------
       // return (<PhoneEntry onCancel={()=>{this.setState({showPhone: false})}} giftValue={this.state.amount}/> )
@@ -64,10 +66,14 @@ export default class issueTab extends Component {
           <Title style={{fontSize:30}}>☎(+1) {this.formatPhoneNumber(this.state.phoneNumber)}</Title>
         </View>
         
-        <NumPad updateAmount={this.updatePhoneNumber} clear={this.clearPhoneArray} />
+        <NumPad update={this.updatePhoneNumber} clear={this.clearPhoneArray} />
 
         <Footer>
-            <Button active={true} onPress={() => {sendSMS('1'+this.state.phoneNumber,smsGenerator(this.state.amount,this.state.phoneNumber)); this.setState({showPhone: false}); alert(smsGenerator(this.state.amount,this.state.phoneNumber));}}>
+            <Button active={true} onPress={() => {
+              // sendSMS('1'+this.state.phoneNumber,smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName));
+              this.setState({showPhone: false});
+              alert(smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName));
+            }}>
               <Text>Confirm Send!</Text>
             </Button>
         </Footer>
@@ -76,6 +82,7 @@ export default class issueTab extends Component {
     );
     }
 
+    // renders the giftcard amount entry page
     return (
       <Container>
         <Header><Title>Issue Store Credit Below</Title></Header>
@@ -84,7 +91,7 @@ export default class issueTab extends Component {
           <Title style={{fontSize:30}}>${this.state.amount}</Title>
         </View>
         
-        <NumPad updateAmount={this.updateAmount} clear={this.clearAmountArray} />
+        <NumPad update={this.updateAmount} clear={this.clearAmountArray} />
 
         <Footer>
             <Button active={true} onPress={() => this.setState({showPhone: true})}>
