@@ -11,18 +11,7 @@ export default class HomePage extends Component {
   }
 
 
-// fix for android. load Robot_medium fonts to avoid font loading error
-  async componentDidMount() {
-    await Expo.Font.loadAsync({
-      Roboto: require("native-base/Fonts/Roboto.ttf"),
-      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-    });
-    this.setState({ isReady: true });
-  }
-
-
   render() {
-    if (!this.state.isReady) {return <Expo.AppLoading />;}
     // console.log ('HomePage gets this token state: ' + JSON.stringify(this.props.screenProps.state))
 
     return (
@@ -41,7 +30,7 @@ export default class HomePage extends Component {
 
         <Tabs>
           <Tab heading="Issue">
-            <IssueTab merchantName={this.props.screenProps.state.merchantInfo.name}/>
+            <IssueTab merchantName={this.props.screenProps.state.merchantInfo.name} token={this.props.screenProps.state.token}/>
           </Tab>
           <Tab heading="Redeem">
             <RedeemTab navigation={this.props.navigation}/>

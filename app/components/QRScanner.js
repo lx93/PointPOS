@@ -25,16 +25,15 @@ export default class QRScanPage extends Component {
     if (result.data !== this.state.lastScannedUrl) {
       LayoutAnimation.spring();
       this.setState({ lastScannedUrl: result.data });
-      this._handleSuccess(result);
+      // console.log(result.data)
+      this.props.result(result.data);
     }
   };
 
-  _handleSuccess = (result) => {
-    this.props.result(result.data);
-    if (!this.state.lastScannedUrl) {return;}
-    this.props.result(this.state.lastScannedUrl);
-    // console.log(this.state.lastScannedUrl);
-  };
+  // _handleSuccess = (result) => {
+  //   if (!this.state.lastScannedUrl) {return;}
+  //   this.props.result(this.state.lastScannedUrl);
+  // };
 
   _handleTest = () => {
     this.props.result('5b16e3e6d97d6c7bc5c70619');

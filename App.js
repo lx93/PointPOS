@@ -10,7 +10,9 @@ import {StackNavigator,navigation} from 'react-navigation';
 const RootStack = StackNavigator(
 	{
 		HomePage:{screen:HomePage},
+
 		LoginPage:{screen:LoginPage},
+
 	},
 	{headerMode:'none'},
 );
@@ -19,8 +21,17 @@ const RootStack = StackNavigator(
 export default class App extends Component{
 	constructor(props) {
 		super(props);
-		this.state = {token:'not available', merchantInfo:{name:'not available'}}
+		this.state = {token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibG92ZXNoYWNrIiwiZW1haWwiOiJhQGIuY29tIiwiaW1hZ2UiOiJ1cGxvYWRzL0RlZmF1bHQucG5nIiwibWVyY2hhbnRJZCI6IjViMDBjZGZlNzMwODA4NmE0YjZiOWM3NSIsImlhdCI6MTUyODM4MjAzMSwiZXhwIjoxNTU5OTM5NjMxfQ.U9Rs4m-DRoUtUV20zOBxYKK_1cPO6dSPi70mjn6MAII", merchantInfo:{name:'not available'}}
 	}
+
+	// fix for android. load Robot_medium fonts to avoid font loading error
+	  async componentDidMount() {
+	    await Expo.Font.loadAsync({
+	      Roboto: require("native-base/Fonts/Roboto.ttf"),
+	      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+	    });
+	    this.setState({ isReady: true });
+	  }
 
 	updateState = async(u,p) => {
 		try {
@@ -81,6 +92,9 @@ export default class App extends Component{
 
 
 	render() {
+		// fix for android. load Robot_medium fonts to avoid font loading error
+		if (!this.state.isReady) {return <Expo.AppLoading />;}
+
 		this.allProps = {state: this.state, updateState: (u,p) => this.updateState(u,p)};
 		console.log(this.state)
 		return (<RootStack screenProps= {this.allProps} />)

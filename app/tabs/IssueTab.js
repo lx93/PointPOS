@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, Alert } from 'react-native'
 import {Container,Header,Title,Content,Button,Icon,Body,Left,Right,Item,Input,Form,View,Text,Footer} from "native-base";
 import NumPad from '../components/NumPad';
-import PhoneEntry from '../components/PhoneEntry';
 import {sendSMS,smsGenerator} from '../utils/Messaging';
+import {createBalance,updateBalance} from '../utils/Balance';
 
 
 export default class IssueTab extends Component {
@@ -13,7 +13,7 @@ export default class IssueTab extends Component {
     super(props);
     amountArray = [];
     phoneArray = [];
-    this.state = {amount: 0, showPhone: false, phoneNumber: null};
+    this.state = {amount: 0, showPhone: false, phoneNumber: null, balanceId: null};
   }
 
 
@@ -37,6 +37,8 @@ export default class IssueTab extends Component {
       amountArray = [];
       this.setState({amount:0});
   }
+
+
   formatPhoneNumber = (phoneNumber) => {
     if (phoneNumber == null) return phoneNumber;
     else if (phoneNumber.length <= 2) return phoneNumber;
@@ -50,31 +52,34 @@ export default class IssueTab extends Component {
     }
   }
 
+
+  issueBalance = async() => {
+    let balanceId = await createBalance(this.props.token,this.state.amount,1+this.state.phoneNumber);
+    await this.setState({balanceId:balanceId});
+    // sendSMS(1+this.state.phoneNumber,smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName, balanceId));
+    alert(smsGenerator(this.state.amount,1+this.state.phoneNumber,this.props.merchantName,this.state.balanceId));
+  }
+
   render() {
 
     // renders the phone number entry page
     if (this.state.showPhone) {
-      // ------------------------- this renders an alert-input for number entry ---------------------
-      // return (<PhoneEntry onCancel={()=>{this.setState({showPhone: false})}} giftValue={this.state.amount}/> )
-
-      // ------------------------ Alternative, this renders in the same page --------------------
       return (
       <Container>
         <Header><Title>Enter Customer Phone Number Below</Title></Header>
 
         <View style={{flex: 1, justifyContent: 'space-evenly'}}>
-          <Title style={{fontSize:30}}>☎(+1) {this.formatPhoneNumber(this.state.phoneNumber)}</Title>
+          <Text style={{fontSize:30,textAlign:"center"}}>☎(+1) {this.formatPhoneNumber(this.state.phoneNumber)}</Text>
         </View>
         
         <NumPad update={this.updatePhoneNumber} clear={this.clearPhoneArray} />
 
         <Footer>
             <Button active={true} onPress={() => {
-              // sendSMS('1'+this.state.phoneNumber,smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName));
+              this.issueBalance();
               this.setState({showPhone: false});
-              alert(smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName));
             }}>
-              <Text>Confirm Send!</Text>
+              <Text>Issue Giftcard</Text>
             </Button>
         </Footer>
       </Container>
@@ -82,13 +87,14 @@ export default class IssueTab extends Component {
     );
     }
 
+
     // renders the giftcard amount entry page
     return (
       <Container>
         <Header><Title>Issue Store Credit Below</Title></Header>
 
         <View style={{flex: 1, justifyContent: 'space-evenly'}}>
-          <Title style={{fontSize:30}}>${this.state.amount}</Title>
+          <Text style={{fontSize:30,textAlign:"center"}}>${this.state.amount}</Text>
         </View>
         
         <NumPad update={this.updateAmount} clear={this.clearAmountArray} />
@@ -98,13 +104,9 @@ export default class IssueTab extends Component {
               <Text>Next Step: Enter Phone Number</Text>
             </Button>
         </Footer>
-
-
       </Container>
-
-
-
     );
+
   }
 }
 
