@@ -58,6 +58,13 @@ export default class IssueTab extends Component {
     await this.setState({balanceId:balanceId});
     // sendSMS(1+this.state.phoneNumber,smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName, balanceId));
     alert(smsGenerator(this.state.amount,1+this.state.phoneNumber,this.props.merchantName,this.state.balanceId));
+    this.setState({showPhone: false, phoneNumber: null, balanceId: null, amount: 0});
+  }
+
+  cancelButton() {
+    amountArray = [];
+    phoneArray = [];
+    this.setState({showPhone: false, phoneNumber: null, balanceId: null, amount: 0});
   }
 
   render() {
@@ -75,12 +82,14 @@ export default class IssueTab extends Component {
         <NumPad update={this.updatePhoneNumber} clear={this.clearPhoneArray} />
 
         <Footer>
-            <Button active={true} onPress={() => {
+            <Button success active={true} onPress={() => {
               this.issueBalance();
-              this.setState({showPhone: false});
             }}>
               <Text>Issue Giftcard</Text>
             </Button>
+             <Button danger active={true} onPress={() => this.cancelButton()}>
+                <Text>Cancel</Text>
+              </Button>
         </Footer>
       </Container>
 
@@ -100,7 +109,7 @@ export default class IssueTab extends Component {
         <NumPad update={this.updateAmount} clear={this.clearAmountArray} />
 
         <Footer>
-            <Button active={true} onPress={() => this.setState({showPhone: true})}>
+            <Button success active={true} onPress={() => this.setState({showPhone: true})}>
               <Text>Next Step: Enter Phone Number</Text>
             </Button>
         </Footer>

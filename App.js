@@ -4,15 +4,15 @@ import React, {Component} from 'react';
 import HomePage from './app/pages/HomePage';
 import LoginPage from './app/pages/LoginPage';
 import ButtomSubmit from './app/components/LoginPage/ButtonSubmit';
+import {getMerchantInfo,getToken} from './app/utils/Login';
 import {StackNavigator,navigation} from 'react-navigation';
+import {AsyncStorage,View,StatusBar} from 'react-native';
 
 
 const RootStack = StackNavigator(
 	{
-		HomePage:{screen:HomePage},
-
 		LoginPage:{screen:LoginPage},
-
+		HomePage:{screen:HomePage},
 	},
 	{headerMode:'none'},
 );
@@ -21,7 +21,7 @@ const RootStack = StackNavigator(
 export default class App extends Component{
 	constructor(props) {
 		super(props);
-		this.state = {token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibG92ZXNoYWNrIiwiZW1haWwiOiJhQGIuY29tIiwiaW1hZ2UiOiJ1cGxvYWRzL0RlZmF1bHQucG5nIiwibWVyY2hhbnRJZCI6IjViMDBjZGZlNzMwODA4NmE0YjZiOWM3NSIsImlhdCI6MTUyODM4MjAzMSwiZXhwIjoxNTU5OTM5NjMxfQ.U9Rs4m-DRoUtUV20zOBxYKK_1cPO6dSPi70mjn6MAII", merchantInfo:{name:'not available'}}
+		this.state = {token: undefined, merchantInfo:{name:'not available'}}
 	}
 
 	// fix for android. load Robot_medium fonts to avoid font loading error
@@ -35,69 +35,41 @@ export default class App extends Component{
 
 	updateState = async(u,p) => {
 		try {
-			let token = await this.getToken(u,p);
-			let merchantInfo = await this.getMerchantInfo(token);
-			
-			await this.setState({token:token,merchantInfo});
+			let token = await getToken(u,p);
+			await this.setState({token:token});
+			let merchantInfo = await getMerchantInfo(token);
+			await this.setState({merchantInfo});
 
-
-			if (merchantInfo.message == 'Auth failed') {alert('Incorrect Login. Please try again.');}
-			else {alert('Login successful'); }
-
-			// console.log('our token state is: '+ JSON.stringify(this.state.token))
-			// console.log("our merchantInfo name is: "+this.state.merchantInfo.name)
+			// save the authToken we fetched to AsyncStorage
+			if (this.state.token != undefined){
+				try {
+					await AsyncStorage.setItem('authToken', this.state.token);
+					console.log('authToken is now stored to AsyncStorage');
+				} catch (error) {console.log('error saving authToken')}	
+			}
 		}
 		catch (error) {console.log(error);}
 	}
 
-
-
-// update the state of merchant using authToken
-	getMerchantInfo = async(authToken) => {
-	    var options = {
-	      "method": "GET",
-	      "headers": {
-	        "authorization": "Bearer " + authToken,
-	        "content-type": "application/json"
-	    	}
-		}
-
+	updateStateThruToken = async(token) => {
 		try {
-			let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/',options);
-			let responseJson = await response.json();
-			return responseJson;
-		} catch (error) {console.error(error);}
-	}
-
-// send over the username and password to server to retrieve an authToken
-	getToken = async(u,p) => {
-		console.log('username is: '+u+' password is: '+p)
-	    var options = {
-	    	"method": "POST",
-	    	"headers": {
-	    		"content-type": "application/json"
-	    	},
-	    	"body": JSON.stringify({
-	    		"email": u,
-	    		"password": p,
-	    	}),
-	    };
-
-		try {
-			let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/login',options);
-			let responseJson = await response.json();
-			return responseJson.token;
-		} catch (error) {console.error(error);}
-	}
+			let merchantInfo = await getMerchantInfo(token);
+			await this.setState({token:token})
+			await this.setState({merchantInfo});
+		}	catch (error) {console.log(error);}	}
 
 
 	render() {
 		// fix for android. load Robot_medium fonts to avoid font loading error
 		if (!this.state.isReady) {return <Expo.AppLoading />;}
 
-		this.allProps = {state: this.state, updateState: (u,p) => this.updateState(u,p)};
+		this.allProps = {state: this.state, updateState: this.updateState, updateStateThruToken: this.updateStateThruToken};
 		console.log(this.state)
-		return (<RootStack screenProps= {this.allProps} />)
+		return (
+			<View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+				<RootStack screenProps= {this.allProps} />
+			</View>
+		)
 	}
 }
 

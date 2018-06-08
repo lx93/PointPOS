@@ -3,8 +3,9 @@ import {Dimensions,StatusBar,StyleSheet,TouchableOpacity,} from 'react-native';
 import {Fab,Container,Header,Title,Content,Button,Icon,Body,Left,Right,Item,Input,Form,View,Text,Footer} from "native-base";
 import { BarCodeScanner, Permissions } from 'expo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {getBalance} from '../utils/Balance';
+import {getBalance,updateBalance} from '../utils/Balance';
 import QRScanner from '../components/QRScanner';
+import QRScannerDebug from '../components/QRScannerDebug';
 import NumPad from '../components/NumPad';
 
 
@@ -13,7 +14,7 @@ export default class redeemTab extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {showManualEntryPage: false, showDeductPage: false, deductAmount: 0, balance: 0};
+    this.state = {showManualEntryPage: false, showDeductPage: false, deductAmount: 0, balance: null, balanceId: null};
     this.setBalanceIdState = this.setBalanceIdState.bind(this);
     deductAmountArray = [];
   }
@@ -33,8 +34,17 @@ export default class redeemTab extends Component {
     balanceId = parsedData.balanceId;
     await this.setState({balanceId:balanceId})
     await this.setState({balance: await getBalance(this.state.balanceId)})
-    alert(await getBalance(this.state.balanceId))
     this.setState({showDeductPage: true});
+  }
+
+  deductBalanceId = async() => {
+    await updateBalance(this.props.token,-this.state.deductAmount,this.state.balanceId);
+    deductAmountArray = [];
+    this.setState({showDeductPage: false, showManualEntryPage: false, deductAmount: 0, balance: null, balanceId: null})  }
+
+  cancelButton() {
+    deductAmountArray = [];
+    this.setState({showDeductPage: false, showManualEntryPage: false, deductAmount: 0, balance: null, balanceId: null})
   }
 
 
@@ -54,8 +64,11 @@ export default class redeemTab extends Component {
           <NumPad update={this.updateDeductAmount} clear={this.clearDeductAmountArray} />
 
           <Footer>
-              <Button active={true} onPress={() => this.setState({showDeductPage: false, showManualEntryPage: false})}>
-                <Text>Finish Transaction</Text>
+              <Button success active={true} onPress={() => this.deductBalanceId()}>
+                <Text>Deduct Balance</Text>
+              </Button>
+             <Button danger active={true} onPress={() => this.cancelButton()}>
+                <Text>Cancel</Text>
               </Button>
           </Footer>
         </Container>
@@ -69,7 +82,6 @@ export default class redeemTab extends Component {
           <Container>
             <QRScanner result={this.setBalanceIdState} />
 
-            <View style={{ flex: 1 }}>
               <Fab
                 active={this.state.active}
                 direction="up"
@@ -79,7 +91,6 @@ export default class redeemTab extends Component {
                 onPress={() => this.setState({ active: !this.state.active, showManualEntryPage: true })}>
                 <MaterialCommunityIcons name="keyboard" />
               </Fab>
-            </View>      
           </Container>
         )
     }

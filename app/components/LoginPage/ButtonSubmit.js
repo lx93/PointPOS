@@ -40,7 +40,7 @@ export default class ButtonSubmit extends Component {
 
 
     setTimeout(() => {
-      if (this.props.screenProps.state.merchantInfo.message == 'Auth failed') {this.props.navigation.navigate('LoginPage')}
+      if (!this.props.screenProps.state.token) {this.props.navigation.navigate('LoginPage')}
       else (this.props.navigation.navigate('HomePage'))
       this.setState({isLoading: false});
       this.buttonAnimated.setValue(0);

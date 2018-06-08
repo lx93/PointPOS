@@ -1,7 +1,7 @@
 export const sendSMS = async(dst,text) => {
 
     var plivoURL = 'https://api.plivo.com/v1/Account/MANJZIMMVJN2RHMZE1MJ/Message/';
-    var pointURL = 'http://point-server.us-east-1.elasticbeanstalk.com/messaging';
+    var pointURL = 'https://api.pointup.io/messaging';
 
     var plivo = {
       "method": "POST",
@@ -28,7 +28,11 @@ export const sendSMS = async(dst,text) => {
       let response = await fetch(pointURL,point);
       let responseJson = await response.text();
       alert(responseJson);
-    } catch (error) {console.error(error);}
+    } catch (error) {
+      console.error(error);
+      alert('cannot connect to server');
+      return;
+    }
 }
 
 

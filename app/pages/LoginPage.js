@@ -7,16 +7,31 @@ import SignupSection from '../components/LoginPage/SignupSection';
 import {View,Text} from 'native-base';
 import {StyleSheet, Image, ImageBackground} from 'react-native';
 import bgSrc from '../resources/wallpaper.png';
+import {AsyncStorage} from 'react-native';
 
 
 var username
 var password
 
 export default class LoginPage extends Component {
-
   constructor(props) {
     super(props);
     this.getToken = this.getToken.bind(this);
+  }
+
+  async componentDidMount() {
+
+    // we check to see if we have authToken stored in AsyncStorage from previous session
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+
+      if (token != null){
+        console.log("Found authToken from AsyncStorage! Log in automatically. " + token);
+        console.log("Fetching merchantInfo based on stored authToken and setting state...")
+        this.props.screenProps.updateStateThruToken(token);
+        this.props.navigation.navigate('HomePage');
+      }
+    } catch (error) {console.log('AsyncStorage authToken does not exist')}
   }
 
 

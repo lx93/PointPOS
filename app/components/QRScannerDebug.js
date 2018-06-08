@@ -3,7 +3,7 @@ import {Dimensions,Text,StatusBar,StyleSheet,TouchableOpacity,LayoutAnimation} f
 import { Container, Header, View, Button, Icon, Fab } from 'native-base';
 import { BarCodeScanner, Permissions } from 'expo';
 
-export default class QRScanPage extends Component {
+export default class QRScanPagDebug extends Component {
 
   constructor(props) {
     super(props);
@@ -35,6 +35,9 @@ export default class QRScanPage extends Component {
   //   this.props.result(this.state.lastScannedUrl);
   // };
 
+  _handleTest = () => {
+    this.props.result(JSON.stringify({"balanceId":"5b1953f5dc1548113c724e7a"}));
+  };
 
   render() {
 
@@ -53,6 +56,15 @@ export default class QRScanPage extends Component {
                       height: Dimensions.get('window').height,
                       width: Dimensions.get('window').width,}}/>}
           </View>
+
+          // this is to enabling the test scan button for debugging
+
+          <View style={{ flex: 1 }}>
+            <Button block success onPress={()=> this._handleTest()}>
+              <Text>test scan</Text>
+            </Button>
+          </View>
+
       </Container>
 
     );

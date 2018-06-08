@@ -1,9 +1,13 @@
 export const getBalance = async(balanceId) => {
     try {
-      let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/balances/'+balanceId);
+      let response = await fetch('https://api.pointup.io/merchants/balances/'+balanceId);
       let responseJson = await response.json();
       return(responseJson.balance)
-    } catch (error) {console.error(error);}
+    } catch (error) {
+      console.error(error);
+      alert('cannot connect to server');
+      return;
+    }
 }
 
 
@@ -14,15 +18,19 @@ export const updateBalance = async(authToken,amount,balanceId) => {
          'Authorization': 'Bearer ' + authToken,
          'Content-Type': 'application/json' 
        },
-      "body": JSON.stringify({ "balanceId": balanceId, "value": parseInt(amount)}),
+      "body": JSON.stringify({ "balanceId": balanceId, "value": parseFloat(amount)}),
     };
 
     try {
-      let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/balances/',options);
+      let response = await fetch('https://api.pointup.io/merchants/balances/',options);
       let responseJson = await response.json();
-      console.log(JSON.stringify({ "balanceId": balanceId, "value": parseInt(amount)}))
+      console.log(JSON.stringify({ "balanceId": balanceId, "value": parseFloat(amount)}))
       return(balanceId)
-    } catch (error) {console.error(error);}
+    } catch (error) {
+      console.error(error);
+      alert('cannot connect to server');
+      return;
+    }
 }
 
 export const createBalance = async(authToken,amount,phone) => {
@@ -32,11 +40,11 @@ export const createBalance = async(authToken,amount,phone) => {
          'Authorization': 'Bearer ' + authToken,
          'Content-Type': 'application/json' 
        },
-      "body": JSON.stringify({ "phone": phone, "balance": parseInt(amount)}),
+      "body": JSON.stringify({ "phone": phone, "balance": parseFloat(amount)}),
     };
 
     try {
-      let response = await fetch('http://point-server.us-east-1.elasticbeanstalk.com/merchants/balances/',options);
+      let response = await fetch('https://api.pointup.io/merchants/balances/',options);
       let responseJson = await response.json();
 
       // check if the balanceId already exists for this phone number. if it does, call updateBalance() instead
@@ -44,5 +52,9 @@ export const createBalance = async(authToken,amount,phone) => {
 
       return (responseJson.balanceId)
 
-    } catch (error) {console.error(error);}
+    } catch (error) {
+      console.error(error);
+      alert('cannot connect to server');
+      return;
+    }
 }
