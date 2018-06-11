@@ -23,7 +23,10 @@ export default class redeemTab extends Component {
     deductAmountArray.push(digit);
     this.setState({deductAmount:deductAmountArray.join('')});
   }
-
+  deleteDeductAmount = () => {
+    deductAmountArray.pop();
+    this.setState({deductAmount:deductAmountArray.join('')});
+  }
   clearDeductAmountArray = () => {
     deductAmountArray = [];
     this.setState({deductAmount:0});
@@ -39,11 +42,11 @@ export default class redeemTab extends Component {
 
   deductBalanceId = async() => {
     await updateBalance(this.props.token,-this.state.deductAmount,this.state.balanceId);
-    deductAmountArray = [];
+    clearDeductAmountArray();
     this.setState({showDeductPage: false, showManualEntryPage: false, deductAmount: 0, balance: null, balanceId: null})  }
 
   cancelButton() {
-    deductAmountArray = [];
+    clearDeductAmountArray();
     this.setState({showDeductPage: false, showManualEntryPage: false, deductAmount: 0, balance: null, balanceId: null})
   }
 
@@ -61,7 +64,7 @@ export default class redeemTab extends Component {
             <Text style={{fontSize:30,textAlign:"center"}}>${this.state.deductAmount}</Text>
           </View>
           
-          <NumPad update={this.updateDeductAmount} clear={this.clearDeductAmountArray} />
+          <NumPad update={this.updateDeductAmount} del={this.deleteDeductAmount} />
 
           <Footer>
               <Button success active={true} onPress={() => this.deductBalanceId()}>

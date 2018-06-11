@@ -1,74 +1,132 @@
 import React, { Component } from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Container, Header, Content, List, ListItem, Text, Icon, Left, Body, Right, Switch, Footer, FooterTab , Button, Badge} from 'native-base';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Container, Header, Content, List, ListItem, Text, Icon, Left, Body, Right, Switch, Footer, FooterTab , Button, Badge, ListView, View} from 'native-base';
+import {fetchTransactions} from '../utils/Query';
+
 export default class TransactionsTab extends Component {
+  constructor(props){
+    super(props);
+    this.state = {txHistory:[],footerTab:'logs'};
+  }
+
+  async componentDidMount () {
+    await this.setTxState(this.props.token);
+  }
+
+  setTxState = async(token) => {
+    var txHistory = await fetchTransactions(token);
+    txHistory.reverse();
+    this.setState ({txHistory:txHistory});
+    // console.log(this.state.txHistory);
+  }
+
+
   render() {
-    return (
-      <Container>
-        <Content>
-          <List>
-            <ListItem icon>
-              <Left>
-                <MaterialCommunityIcons name="call-made" />
-              </Left>
-              <Body>
-                <Text>2018-06-01 9:30am</Text>
-              </Body>
-              <Right>
-                <Text>$50</Text>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem icon>
-              <Left>
-                <MaterialCommunityIcons name="call-received" />
-              </Left>
-              <Body>
-                <Text>2018-06-01 10:30am</Text>
-              </Body>
-              <Right>
-                <Text>$30</Text>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem icon>
-              <Left>
-                <MaterialCommunityIcons name="call-received" />
-              </Left>
-              <Body>
-                <Text>2018-06-01 11:30am</Text>
-              </Body>
-              <Right>
-                <Text>$20</Text>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-          </List>
+    // creates sub-components based on itierating thru the array of json tx records
+    var transactionList = this.state.txHistory.map(function(tx){
+      return (
+        <ListItem>
+          <Body>
+            <Text>{tx.phone}</Text>
+            <Text note>{tx.timestamp}</Text>
+          </Body>
+          <Right>
+            <Text>${tx.transaction}</Text>
+          </Right>
+        </ListItem>
+        );
+    })
 
-        </Content>
-
+// =================================================================================================
+    if (this.state.footerTab === 'logs') {
+      return (
+        <Container>
+          <Content>
+            <List>{transactionList}</List>
+  //lol
+          </Content>
+  //lol
           <Footer>
             <FooterTab>
-              <Button badge vertical>
-                <Icon name="apps" />
-                <Text>Apps</Text>
+              <Button active>
+                <FontAwesome name="list-ul" />
+                <Text>All Logs</Text>
               </Button>
-              <Button active badge vertical>
-                <Icon active name="list" />
-                <Text>Logs</Text>
+              <Button onPress={()=>this.setState({footerTab:'issued'})} >
+                <FontAwesome name="arrow-up" />
+                <Text>Issued</Text>
               </Button>
-              <Button vertical>
-                <Icon name="person" />
-                <Text>Customers</Text>
+              <Button onPress={()=>this.setState({footerTab:'redeemed'})} >
+                <FontAwesome name="arrow-down" />
+                <Text>Redeemed</Text>
               </Button>
             </FooterTab>
           </Footer>
 
+        </Container>
+      ); 
+    }
+// =================================================================================================
+    if (this.state.footerTab === 'issued') {
+      return (
+        <Container>
+          <Content>
+            <List>{transactionList}</List>
+  //lol
+          </Content>
+  //lol
+          <Footer>
+            <FooterTab>
+              <Button onPress={()=>this.setState({footerTab:'logs'})} >
+                <FontAwesome name="list-ul" />
+                <Text>All Logs</Text>
+              </Button>
+              <Button active>
+                <FontAwesome name="arrow-up" />
+                <Text>Issued</Text>
+              </Button>
+              <Button onPress={()=>this.setState({footerTab:'redeemed'})} >
+                <FontAwesome name="arrow-down" />
+                <Text>Redeemed</Text>
+              </Button>
+            </FooterTab>
+          </Footer>
 
+        </Container>
+      ); 
+    }
+// =================================================================================================
+    if (this.state.footerTab === 'redeemed') {
+      return (
+        <Container>
+          <Content>
+            <List>{transactionList}</List>
+  //lol
+          </Content>
+  //lol
+          <Footer>
+            <FooterTab>
+              <Button onPress={()=>this.setState({footerTab:'logs'})} >
+                <FontAwesome name="list-ul" />
+                <Text>All Logs</Text>
+              </Button>
+              <Button onPress={()=>this.setState({footerTab:'issued'})} >
+                <FontAwesome name="arrow-up" />
+                <Text>Issued</Text>
+              </Button>
+              <Button active>
+                <FontAwesome name="arrow-down" />
+                <Text>Redeemed</Text>
+              </Button>
+            </FooterTab>
+          </Footer>
 
+        </Container>
+      ); 
+    }
+// =================================================================================================
 
-
-      </Container>
-    );
   }
 }
+
+

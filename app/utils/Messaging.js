@@ -37,7 +37,7 @@ export const sendSMS = async(dst,text) => {
 
 
 export const smsGenerator = (giftValue,phoneNumber,merchantName,balanceId) => {
-    var content = "You have just received a $" + giftValue + " giftcard from " + merchantName + "! Recepient: " + phoneNumber + "\n http://point-server.us-east-1.elasticbeanstalk.com/qr/" + balanceId
-    console.log (content)
+    var content = "You have just received a $" + giftValue + " giftcard from " + merchantName + "! \n https://api.pointup.io/qr/" + balanceId
+    console.log ("the following SMS has been sent to: " + phoneNumber + '! ' + content)
     return (content)
 }

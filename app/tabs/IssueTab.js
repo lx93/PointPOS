@@ -16,9 +16,7 @@ export default class IssueTab extends Component {
     this.state = {amount: 0, showPhone: false, phoneNumber: null, balanceId: null};
   }
 
-
-
-  showPhone = () => {this.setState({showPhone:true});}
+  // showPhone = () => {this.setState({showPhone:true});}
 
 
   updateAmount = (digit) => {
@@ -29,13 +27,21 @@ export default class IssueTab extends Component {
     phoneArray.push(digit);
     this.setState({phoneNumber:phoneArray.join('')});
   }
+  deletePhoneDigit = () => {
+    phoneArray.pop();
+    this.setState({phoneNumber:phoneArray.join('')});   
+  }
+  deleteAmountDigit = () => {
+    amountArray.pop();
+    this.setState({amount:amountArray.join('')});   
+  }
   clearPhoneArray = () => {
-      phoneArray = [];
-      this.setState({phoneNumber:null});
+    phoneArray = [];
+    this.setState({phoneNumber:null});
   }
   clearAmountArray = () => {
-      amountArray = [];
-      this.setState({amount:0});
+    amountArray = [];
+    this.setState({amount:0});
   }
 
 
@@ -54,17 +60,26 @@ export default class IssueTab extends Component {
 
 
   issueBalance = async() => {
+    //this updates the balance on our server
     let balanceId = await createBalance(this.props.token,this.state.amount,1+this.state.phoneNumber);
+    alert ('Successs! Customer ' + this.state.phoneNumber + ' has just received $' + this.state.amount);
     await this.setState({balanceId:balanceId});
-    // sendSMS(1+this.state.phoneNumber,smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName, balanceId));
-    alert(smsGenerator(this.state.amount,1+this.state.phoneNumber,this.props.merchantName,this.state.balanceId));
-    this.setState({showPhone: false, phoneNumber: null, balanceId: null, amount: 0});
+
+    // this sends SMS to the consumer
+    var text = smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName, balanceId);
+    sendSMS(1+this.state.phoneNumber,text);
+
+    // this clears everything
+    this.clearAmountArray();
+    this.clearPhoneArray();
+    this.setState({showPhone: false, balanceId: null});
   }
 
   cancelButton() {
-    amountArray = [];
-    phoneArray = [];
-    this.setState({showPhone: false, phoneNumber: null, balanceId: null, amount: 0});
+    // this clears everything
+    this.clearAmountArray();
+    this.clearPhoneArray();
+    this.setState({showPhone: false, balanceId: null});
   }
 
   render() {
@@ -79,12 +94,10 @@ export default class IssueTab extends Component {
           <Text style={{fontSize:30,textAlign:"center"}}>☎(+1) {this.formatPhoneNumber(this.state.phoneNumber)}</Text>
         </View>
         
-        <NumPad update={this.updatePhoneNumber} clear={this.clearPhoneArray} />
+        <NumPad update={this.updatePhoneNumber} del={this.deletePhoneDigit} />
 
         <Footer>
-            <Button success active={true} onPress={() => {
-              this.issueBalance();
-            }}>
+            <Button success active={true} onPress={() => {this.issueBalance()}}>
               <Text>Issue Giftcard</Text>
             </Button>
              <Button danger active={true} onPress={() => this.cancelButton()}>
@@ -106,7 +119,7 @@ export default class IssueTab extends Component {
           <Text style={{fontSize:30,textAlign:"center"}}>${this.state.amount}</Text>
         </View>
         
-        <NumPad update={this.updateAmount} clear={this.clearAmountArray} />
+        <NumPad update={this.updateAmount} del={this.deleteAmountDigit} />
 
         <Footer>
             <Button success active={true} onPress={() => this.setState({showPhone: true})}>

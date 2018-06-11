@@ -33,7 +33,7 @@ export default class NumPad extends Component{
 		        <View style={{flex: 1, flexDirection: 'row'}}>
 		          <Button transparent style={styles.numpad} onPress={() => this.props.update('.')}><Text style={{fontSize:20}}>.</Text></Button>
 		          <Button transparent style={styles.numpad} onPress={() => this.props.update('0')}><Text style={{fontSize:20}}>0</Text></Button>
-		          <Button transparent style={styles.numpad} onPress={() => this.props.clear()}><Text style={{fontSize:20}}>DEL</Text></Button>
+		          <Button transparent style={styles.numpad} onPress={() => this.props.del()}><Text style={{fontSize:20}}>DEL</Text></Button>
 		        </View>
 		    </Container>
 		)

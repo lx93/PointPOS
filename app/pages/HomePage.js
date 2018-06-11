@@ -45,10 +45,10 @@ export default class HomePage extends Component {
             <IssueTab merchantName={this.props.screenProps.state.merchantInfo.name} token={this.props.screenProps.state.token}/>
           </Tab>
           <Tab heading="Redeem">
-            <RedeemTab navigation={this.props.navigation} token={this.props.screenProps.state.token}/>
+            <RedeemTab token={this.props.screenProps.state.token}/>
           </Tab>
           <Tab heading="Transactions">
-            <TransactionTab />
+            <TransactionTab token={this.props.screenProps.state.token}/>
           </Tab>
         </Tabs>
       </Container>

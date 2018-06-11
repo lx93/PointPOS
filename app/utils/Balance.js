@@ -12,19 +12,21 @@ export const getBalance = async(balanceId) => {
 
 
 export const updateBalance = async(authToken,amount,balanceId) => {
+    var body = JSON.stringify({ "balanceId": balanceId, "value": parseFloat(amount)});
     var options = { 
       "method": 'PUT',
       "headers": {
          'Authorization': 'Bearer ' + authToken,
          'Content-Type': 'application/json' 
        },
-      "body": JSON.stringify({ "balanceId": balanceId, "value": parseFloat(amount)}),
+      "body": body,
     };
 
     try {
       let response = await fetch('https://api.pointup.io/merchants/balances/',options);
       let responseJson = await response.json();
-      console.log(JSON.stringify({ "balanceId": balanceId, "value": parseFloat(amount)}))
+      console.log("updateBalance() sent the following to server: " + body)
+      console.log("updateBalance() gets the following message: " + responseJson.message)
       return(balanceId)
     } catch (error) {
       console.error(error);
@@ -34,23 +36,32 @@ export const updateBalance = async(authToken,amount,balanceId) => {
 }
 
 export const createBalance = async(authToken,amount,phone) => {
+    var body = JSON.stringify({ "phone": phone, "balance": parseFloat(amount)});
     var options = { 
-      "method": 'POST',
+      "method": 'POST', 
       "headers": {
          'Authorization': 'Bearer ' + authToken,
          'Content-Type': 'application/json' 
        },
-      "body": JSON.stringify({ "phone": phone, "balance": parseFloat(amount)}),
+      "body": body,
     };
 
     try {
       let response = await fetch('https://api.pointup.io/merchants/balances/',options);
       let responseJson = await response.json();
+      console.log("createBalance() sent the following to server: " + body)
+      console.log("createBalance() gets the following message: " + responseJson.message)
 
       // check if the balanceId already exists for this phone number. if it does, call updateBalance() instead
-      if (response.status === 409) {await updateBalance(authToken,amount,responseJson.balanceId)}
+      if (response.status === 409) {
+        console.log('createBalance() now calling updateBalance()');
+        return await updateBalance(authToken,amount,responseJson.balanceId);
+      }
+      if (response.status === 201) {
+        console.log('createBalance() successful!');
+        return (responseJson.balanceId);
+      }
 
-      return (responseJson.balanceId)
 
     } catch (error) {
       console.error(error);
