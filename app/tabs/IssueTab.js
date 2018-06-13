@@ -67,7 +67,7 @@ export default class IssueTab extends Component {
 
     // this sends SMS to the consumer
     var text = smsGenerator(this.state.amount,this.state.phoneNumber,this.props.merchantName, balanceId);
-    sendSMS(1+this.state.phoneNumber,text);
+    // sendSMS(1+this.state.phoneNumber,text);
 
     // this clears everything
     this.clearAmountArray();

@@ -12,7 +12,7 @@ export const getBalance = async(balanceId) => {
 
 
 export const updateBalance = async(authToken,amount,balanceId) => {
-    var body = JSON.stringify({ "balanceId": balanceId, "value": parseFloat(amount)});
+    var body = JSON.stringify({ "balanceId": balanceId, "value": parseFloat(amount).toFixed(2).toString()});
     var options = { 
       "method": 'PUT',
       "headers": {
@@ -36,7 +36,7 @@ export const updateBalance = async(authToken,amount,balanceId) => {
 }
 
 export const createBalance = async(authToken,amount,phone) => {
-    var body = JSON.stringify({ "phone": phone, "balance": parseFloat(amount)});
+    var body = JSON.stringify({ "phone": phone, "balance": parseFloat(amount).toFixed(2).toString()});
     var options = { 
       "method": 'POST', 
       "headers": {

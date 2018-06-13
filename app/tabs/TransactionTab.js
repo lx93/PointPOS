@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Container, Header, Content, List, ListItem, Text, Icon, Left, Body, Right, Switch, Footer, FooterTab , Button, Badge, ListView, View} from 'native-base';
-import {fetchTransactions} from '../utils/Query';
+import {fetchTransactions,findIssuedTx,findRedeemedTx} from '../utils/Query';
 
 export default class TransactionsTab extends Component {
   constructor(props){
     super(props);
-    this.state = {txHistory:[],footerTab:'logs'};
+    this.state = {allTx:[],issuedTx:[],redeemedTx:[],footerTab:'logs'};
   }
 
   async componentDidMount () {
@@ -14,16 +14,18 @@ export default class TransactionsTab extends Component {
   }
 
   setTxState = async(token) => {
-    var txHistory = await fetchTransactions(token);
-    txHistory.reverse();
-    this.setState ({txHistory:txHistory});
-    // console.log(this.state.txHistory);
+    var allTx = await fetchTransactions(token);
+    allTx.reverse();
+    var issuedTx = findIssuedTx(allTx);
+    var redeemedTx = findRedeemedTx(allTx);
+    this.setState ({allTx:allTx,issuedTx:issuedTx,redeemedTx:redeemedTx});
   }
 
 
+
   render() {
-    // creates sub-components based on itierating thru the array of json tx records
-    var transactionList = this.state.txHistory.map(function(tx){
+    // creates sub-components based on itierating thru the array of all json tx records
+    var transactionList = this.state.allTx.map(function(tx){
       return (
         <ListItem>
           <Body>
@@ -31,7 +33,37 @@ export default class TransactionsTab extends Component {
             <Text note>{tx.timestamp}</Text>
           </Body>
           <Right>
-            <Text>${tx.transaction}</Text>
+            <Text>${tx.amount}</Text>
+          </Right>
+        </ListItem>
+        );
+    })
+
+    // creates sub-components based on itierating thru the array of json tx records issued
+    var issuedList = this.state.issuedTx.map(function(tx){
+      return (
+        <ListItem>
+          <Body>
+            <Text>{tx.phone}</Text>
+            <Text note>{tx.timestamp}</Text>
+          </Body>
+          <Right>
+            <Text>${tx.amount}</Text>
+          </Right>
+        </ListItem>
+        );
+    })
+
+    // creates sub-components based on itierating thru the array of json tx records redeemed
+    var redeemedList = this.state.redeemedTx.map(function(tx){
+      return (
+        <ListItem>
+          <Body>
+            <Text>{tx.phone}</Text>
+            <Text note>{tx.timestamp}</Text>
+          </Body>
+          <Right>
+            <Text>${tx.amount}</Text>
           </Right>
         </ListItem>
         );
@@ -71,7 +103,7 @@ export default class TransactionsTab extends Component {
       return (
         <Container>
           <Content>
-            <List>{transactionList}</List>
+            <List>{issuedList}</List>
   //lol
           </Content>
   //lol
@@ -100,7 +132,7 @@ export default class TransactionsTab extends Component {
       return (
         <Container>
           <Content>
-            <List>{transactionList}</List>
+            <List>{redeemedList}</List>
   //lol
           </Content>
   //lol
